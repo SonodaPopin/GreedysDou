@@ -90,10 +90,16 @@ public:
     }
 };
 
-int main() {
-    std::string archivo = "Dataset/100-300-001.txt";
-    float thr = 0.8;
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        std::cerr << "Uso: " << argv[0] << " <archivo> <umbral>" << std::endl;
+        return 1;
+    }
+
+    std::string archivo = argv[1];
+    float thr = std::stof(argv[2]);
+
     Greedy algoritmo(archivo, thr);
 
     return 0;
-};
+}
