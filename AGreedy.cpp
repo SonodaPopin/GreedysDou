@@ -57,26 +57,32 @@ class AGreedy{
         return caracteresFrecuentes;
     }
 
-    double calcularSimilitud(const std::string& seleccionada) {
-        if (datos.empty()) return 0.0;
+    double calcularSimilitud(const std::string& seleccionada, float thr) {
+    if (datos.empty()) return 0.0;
 
-        double sumaSimilitudes = 0.0;
-        size_t longitudLinea = datos[0].length();
+    double sumaDiferencias = 0.0;
+    size_t longitudLinea = datos[0].length();
+    int conteoDiferencias = 0;  
 
-        for (const std::string& linea : datos) {
-            if (linea.length() != longitudLinea) continue; // Asegurar que las líneas tienen la misma longitud
+    for (const std::string& linea : datos) {
+        if (linea.length() != longitudLinea) continue; 
 
-            int coincidencias = 0;
-            for (size_t i = 0; i < longitudLinea; ++i) {
-                if (seleccionada[i] == linea[i]) {
-                    coincidencias++;
-                }
+        int diferencias = 0;
+        for (size_t i = 0; i < longitudLinea; ++i) {
+            if (seleccionada[i] != linea[i]) {
+                diferencias++;
             }
-            sumaSimilitudes += static_cast<double>(coincidencias) / longitudLinea;
         }
 
-        return sumaSimilitudes / datos.size(); // Promedio de similitud
+        float proporcionDiferencias = static_cast<float>(diferencias) / longitudLinea;
+
+        if (proporcionDiferencias >= thr) {
+            conteoDiferencias++;
+        }
     }
+
+    return conteoDiferencias; 
+}
 
     public:
     AGreedy(const std::string & ifp, float thr, float alpha){
@@ -103,7 +109,7 @@ class AGreedy{
         size_t longitudLinea = datos[0].length();
         std::string seleccionada(longitudLinea, ' ');
 
-        size_t caracteresDiferentesRequeridos = static_cast<size_t>(longitudLinea * thr);
+        size_t caracteresDiferentesRequeridos = static_cast<size_t>(longitudLinea);
         
         for (size_t i = 0; i < longitudLinea; ++i) {
         std::unordered_map<char, int> frecuenciaPosicion;
@@ -143,11 +149,11 @@ class AGreedy{
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed = end - start;
 
-        double calidad = calcularSimilitud(seleccionada);
+        double calidad = calcularSimilitud(seleccionada, thr);
 
         // Imprimir resultados
         std::cout << "Cadena seleccionada: " << seleccionada << std::endl;
-        std::cout << "Calidad de la cadena: " << calidad * 100 << "%" << std::endl;
+        std::cout << "Calidad de la cadena: " << calidad << std::endl;
         std::cout << "Tiempo de ejecución: " << elapsed.count() << " segundos" << std::endl;
     }
 };
