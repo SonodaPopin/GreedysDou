@@ -9,7 +9,7 @@ using namespace std;
 
 class Greedy{
     private:
-    string ifp, text;
+    string ifp, text, finaltext;
     float thr;
     int nnn, mmm, iii;
 
@@ -66,6 +66,7 @@ class Greedy{
         if (!abrirArchivo()) {
         exit(1);
         }
-        analizarCadenas();
+        finaltext = analizarCadenas();
+        cout << finaltext << endl;
     }
 };
