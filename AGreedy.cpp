@@ -11,10 +11,10 @@
 
 class AGreedy{
     private:
-    std::string ifp;
-    float thr;
-    float alpha;
+    std::string ifp, seleccionada;
+    float thr, alpha, calidad;
     std::vector<std::string> datos;
+    std::chrono::duration<double> elapsed;
 
     void leerArchivo() {
         std::ifstream archivo(ifp);
@@ -81,21 +81,10 @@ class AGreedy{
         }
     }
 
-    return (conteoDiferencias*100)/longitudLinea; 
+    return (conteoDiferencias); 
 }
 
-    public:
-    AGreedy(const std::string & ifp, float thr, float alpha){
-        this->ifp = ifp;
-        this->thr = thr;
-        this->alpha = alpha;
-
-        leerArchivo();
-    }
-
-    void ejecutar() {
-        // Iniciar medición de tiempo
-        auto start = std::chrono::high_resolution_clock::now();
+    std::string ejecutar() {
 
         srand(static_cast<unsigned>(time(0))); // Inicializa la semilla para números aleatorios
 
@@ -103,7 +92,7 @@ class AGreedy{
         
         if (datos.empty()) {
             std::cerr << "No hay datos para procesar." << std::endl;
-            return;
+            return 0;
         }
         
         size_t longitudLinea = datos[0].length();
@@ -145,16 +134,30 @@ class AGreedy{
             seleccionada[i] = caracterMenosFrecuente;
         }
     }
-        // Finalizar medición de tiempo
+        return seleccionada;
+    }
+
+    public:
+    AGreedy(const std::string & ifp, float thr, float alpha){
+        this->ifp = ifp;
+        this->thr = thr;
+        this->alpha = alpha;
+
+        leerArchivo();
+
+        auto start = std::chrono::high_resolution_clock::now();
+        seleccionada = ejecutar();
         auto end = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double> elapsed = end - start;
+        elapsed = end - start;
+        calidad = calcularSimilitud(seleccionada, thr);
+    }
 
-        double calidad = calcularSimilitud(seleccionada, thr);
+    float getCalidad(){
+        return (calidad);
+    }
 
-        // Imprimir resultados
-        std::cout << "Cadena seleccionada: " << seleccionada << std::endl;
-        std::cout << "Calidad de la cadena: " << calidad << "%" << std::endl;
-        std::cout << "Tiempo de ejecución: " << elapsed.count() << " segundos" << std::endl;
+    std::chrono::duration<double> getElapsed(){
+        return(elapsed);
     }
 };
 
@@ -186,7 +189,9 @@ class AGreedy{
     }
 
     AGreedy algoritmo(archivo, umbral, alpha);
-    algoritmo.ejecutar();
+
+    std::cout << "Calidad: " << algoritmo.getCalidad() 
+              << " Tiempo: " << algoritmo.getElapsed().count() << " segundos." << std::endl;
 
     return 0;
 }
