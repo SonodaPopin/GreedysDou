@@ -62,7 +62,7 @@ class AGreedy{
 
     double sumaDiferencias = 0.0;
     size_t longitudLinea = datos[0].length();
-    int conteoDiferencias = 0;  
+    float conteoDiferencias = 0;  
 
     for (const std::string& linea : datos) {
         if (linea.length() != longitudLinea) continue; 
@@ -81,7 +81,7 @@ class AGreedy{
         }
     }
 
-    return conteoDiferencias; 
+    return (conteoDiferencias*100)/longitudLinea; 
 }
 
     public:
@@ -153,7 +153,7 @@ class AGreedy{
 
         // Imprimir resultados
         std::cout << "Cadena seleccionada: " << seleccionada << std::endl;
-        std::cout << "Calidad de la cadena: " << calidad << std::endl;
+        std::cout << "Calidad de la cadena: " << calidad << "%" << std::endl;
         std::cout << "Tiempo de ejecución: " << elapsed.count() << " segundos" << std::endl;
     }
 };
