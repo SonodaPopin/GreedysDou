@@ -99,7 +99,7 @@ public:
         return(finalquality);
     }
 };
-
+/*
 int main(int argc, char *argv[]) {
     if (argc != 5) {
         std::cerr << "Uso: " << argv[0] << " -i <archivo> -th <umbral>" << std::endl;
@@ -127,3 +127,4 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
+*/

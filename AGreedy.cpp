@@ -160,7 +160,7 @@ class AGreedy{
         return(elapsed);
     }
 };
-
+/*
  int main(int argc, char* argv[]) {
      if (argc < 7) {
         std::cerr << "Uso: " << argv[0] << " -i <archivo> -th <umbral> -alpha <valor-alpha>" << std::endl;
@@ -195,3 +195,4 @@ class AGreedy{
 
     return 0;
 }
+*/
