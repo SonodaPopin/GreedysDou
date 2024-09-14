@@ -5,6 +5,7 @@
 #include <string>
 #include <unordered_map>
 #include <limits>
+#include <chrono>
 
 using namespace std;
 
@@ -14,6 +15,7 @@ private:
     float thr;
     int nnn, mmm, finalquality;
     vector<string> cadenasOriginales;
+    chrono::duration<double> elapsed;
 
     bool abrirArchivo() {
         ifstream inputFile(ifp);
@@ -25,7 +27,6 @@ private:
             buffer << inputFile.rdbuf();
             text = buffer.str();
             inputFile.close();
-            cerr << "Archivo recibido con éxito, procesando.." << endl;
             return true;
         }
     }
@@ -84,22 +85,45 @@ public:
         if (!abrirArchivo()) {
             exit(1);
         }
+        auto start = chrono::high_resolution_clock::now();
         finaltext = analizarCadenas();
         finalquality = contarDiferencias();
-        cout << finalquality << " " << finaltext << endl;
+        auto end = chrono::high_resolution_clock::now();
+        elapsed = end - start;
+    }
+
+    chrono::duration<double> getElapsed(){
+        return(elapsed);
+    }
+    float getQuality(){
+        return(finalquality);
     }
 };
 
 int main(int argc, char *argv[]) {
-    if (argc != 3) {
-        std::cerr << "Uso: " << argv[0] << " <archivo> <umbral>" << std::endl;
+    if (argc != 5) {
+        std::cerr << "Uso: " << argv[0] << " -i <archivo> -th <umbral>" << std::endl;
         return 1;
     }
-
-    std::string archivo = argv[1];
-    float thr = std::stof(argv[2]);
-
+    std::string archivo;
+    float thr = 0.0;
+    for (int i = 1; i < argc; i++) {
+        if (std::string(argv[i]) == "-i" && i + 1 < argc) {
+            archivo = argv[++i]; // El siguiente argumento es el archivo
+        } else if (std::string(argv[i]) == "-th" && i + 1 < argc) {
+            thr = std::stof(argv[++i]); // El siguiente argumento es el umbral (convertido a float)
+        } else {
+            std::cerr << "Argumento no reconocido: " << argv[i] << std::endl;
+            return 1;
+        }
+    }
+    if (archivo.empty() || thr <= 0.0) {
+        std::cerr << "Archivo o umbral inválidos." << std::endl;
+        return 1;
+    }
     Greedy algoritmo(archivo, thr);
+    std::cout << "Calidad: " << algoritmo.getQuality() 
+              << " Tiempo: " << algoritmo.getElapsed().count() << " segundos." << std::endl;
 
     return 0;
 }
