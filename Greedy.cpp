@@ -28,15 +28,35 @@ class Greedy{
         }
     }
 
-    void separador() {
-        string p1, p2, p3;
-        istringstream iss(ifp);
-        getline(iss, p1, '-');
-        getline(iss, p2, '-');
-        getline(iss, p3, '.');
-        nnn = stoi(p1);
-        mmm = stoi(p2);
-        iii = stoi(p3);
+    string analizarCadenas() {
+        stringstream ss(ifp);
+        string cadena;
+        vector<unordered_map<char, int>> conteos;
+        while (getline(ss, cadena)) {
+            if (mmm == 0) {
+             mmm = cadena.length();
+            }
+            for(int i=0; i<mmm; i++){
+                if (i >= conteos.size()) {
+                conteos.resize(i + 1);
+                 }
+            nnn++;
+            conteos[i][cadena[i]]++;
+            }
+        }
+            string resultado;
+        for (const auto& conteo : conteos) {
+            char caracterMenosRepetido;
+            int minConteo = 0;
+            for (const auto& par : conteo) {
+                if (par.second < minConteo || minConteo == 0) {
+                    minConteo = par.second;
+                    caracterMenosRepetido = par.first;
+                }
+            }
+        resultado += caracterMenosRepetido;
+        }
+    return resultado;
     }
 
     public:
@@ -46,6 +66,6 @@ class Greedy{
         if (!abrirArchivo()) {
         exit(1);
         }
-        separador();
+        analizarCadenas();
     }
 };
