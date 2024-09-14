@@ -33,12 +33,12 @@ class Greedy{
         istringstream iss(ifp);
         getline(iss, p1, '-');
         getline(iss, p2, '-');
-        getline(iss, p2, '.');
+        getline(iss, p3, '.');
         nnn = stoi(p1);
         mmm = stoi(p2);
         iii = stoi(p3);
     }
-    
+
     public:
      Greedy(const string &ifp, float thr){
         this->ifp = ifp;
