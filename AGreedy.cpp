@@ -13,6 +13,7 @@ class AGreedy{
     private:
     std::string ifp;
     float thr;
+    float alpha;
     std::vector<std::string> datos;
 
     void leerArchivo() {
@@ -78,9 +79,10 @@ class AGreedy{
     }
 
     public:
-    AGreedy(const std::string & ifp, float thr){
+    AGreedy(const std::string & ifp, float thr, float alpha){
         this->ifp = ifp;
         this->thr = thr;
+        this->alpha = alpha;
 
         leerArchivo();
     }
@@ -98,25 +100,45 @@ class AGreedy{
             return;
         }
         
-        // Tomar una línea como referencia (asumimos que todas tienen el mismo largo)
         size_t longitudLinea = datos[0].length();
         std::string seleccionada(longitudLinea, ' ');
+
+        size_t caracteresDiferentesRequeridos = static_cast<size_t>(longitudLinea * thr);
         
         for (size_t i = 0; i < longitudLinea; ++i) {
-            // Selección aleatoria de caracteres en la posición i
-            std::vector<char> candidatos;
-            for (const std::string& linea : datos) {
-                if (i < linea.length()) {
-                    candidatos.push_back(linea[i]);
+        std::unordered_map<char, int> frecuenciaPosicion;
+        for (const std::string& linea : datos) {
+            if (i < linea.length()) {
+                frecuenciaPosicion[linea[i]]++;
+            }
+        }
+
+        // Obtener el carácter más frecuente en esa posición
+        char caracterMenosFrecuente = std::min_element(
+            frecuenciaPosicion.begin(), frecuenciaPosicion.end(),
+            [](const auto& a, const auto& b) { return a.second < b.second; }
+        )->first;
+
+        double p = static_cast<double>(rand()) / RAND_MAX;
+        if (p < alpha) {
+            // Elegir aleatoriamente un carácter en lugar del menos frecuente
+            std::vector<char> caracteresPosibles;
+            for (const auto& par : frecuenciaPosicion) {
+                if (par.first != caracterMenosFrecuente) {
+                    caracteresPosibles.push_back(par.first);
                 }
             }
 
-            if (candidatos.empty()) continue;
-
-            size_t indiceSeleccionado = static_cast<size_t>(rand() % candidatos.size());
-            seleccionada[i] = candidatos[indiceSeleccionado];
+            if (!caracteresPosibles.empty()) {
+                seleccionada[i] = caracteresPosibles[rand() % caracteresPosibles.size()];
+            } else {
+                seleccionada[i] = caracterMenosFrecuente;
+            }
+        } else {
+            // Usar el carácter menos frecuente
+            seleccionada[i] = caracterMenosFrecuente;
         }
-
+    }
         // Finalizar medición de tiempo
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed = end - start;
@@ -131,15 +153,33 @@ class AGreedy{
 };
 
 int main(int argc, char* argv[]) {
-    if (argc < 3) {
-        std::cerr << "Uso: " << argv[0] << " <archivo> <umbral>" << std::endl;
+     if (argc < 7) {
+        std::cerr << "Uso: " << argv[0] << " -i <archivo> -th <umbral> -alpha <valor-alpha>" << std::endl;
         return 1;
     }
 
-    std::string archivo = argv[1];
-    float umbral = std::stof(argv[2]);
+    std::string archivo;
+    float umbral;
+    float alpha;
 
-    AGreedy algoritmo(archivo, umbral);
+    // Procesar los argumentos
+    for (int i = 1; i < argc; ++i) {
+        std::string arg = argv[i];
+        if (arg == "-i" && i + 1 < argc) {
+            archivo = argv[++i];
+        } else if (arg == "-th" && i + 1 < argc) {
+            umbral = std::stof(argv[++i]);
+        }else if (arg == "-alpha" && i + 1 < argc) {
+            alpha = std::stof(argv[++i]);
+        }
+    }
+
+    if (archivo.empty()) {
+        std::cerr << "Archivo no proporcionado." << std::endl;
+        return 1;
+    }
+
+    AGreedy algoritmo(archivo, umbral, alpha);
     algoritmo.ejecutar();
 
     return 0;
