@@ -152,7 +152,7 @@ class AGreedy{
     }
 };
 
-int main(int argc, char* argv[]) {
+ int main(int argc, char* argv[]) {
      if (argc < 7) {
         std::cerr << "Uso: " << argv[0] << " -i <archivo> -th <umbral> -alpha <valor-alpha>" << std::endl;
         return 1;

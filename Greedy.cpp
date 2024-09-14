@@ -4,61 +4,62 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <limits>
 
 using namespace std;
 
-class Greedy{
-    private:
+class Greedy {
+private:
     string ifp, text, finaltext;
     float thr;
-    int nnn, mmm, iii, finalquality;
+    int nnn, mmm, finalquality;
     vector<string> cadenasOriginales;
 
-    bool abrirArchivo(){
+    bool abrirArchivo() {
         ifstream inputFile(ifp);
         if (!inputFile.is_open()) {
             cerr << "No se pudo abrir el archivo de entrada." << endl;
             return false;
-        }else{
+        } else {
             stringstream buffer;
             buffer << inputFile.rdbuf();
             text = buffer.str();
             inputFile.close();
-            cerr << "Archivo recibido con éxito, procesando.." << endl;   
+            cerr << "Archivo recibido con éxito, procesando.." << endl;
             return true;
         }
     }
 
     string analizarCadenas() {
-        stringstream ss(ifp);
+        stringstream ss(text);
         string cadena;
         vector<unordered_map<char, int>> conteos;
         while (getline(ss, cadena)) {
             cadenasOriginales.push_back(cadena);
             if (mmm == 0) {
-             mmm = cadena.length();
+                mmm = cadena.length();
             }
-            for(int i=0; i<mmm; i++){
+            for (int i = 0; i < mmm; i++) {
                 if (i >= conteos.size()) {
-                conteos.resize(i + 1);
-                 }
-            nnn++;
-            conteos[i][cadena[i]]++;
+                    conteos.resize(i + 1);
+                }
+                nnn++;
+                conteos[i][cadena[i]]++;
             }
         }
-            string resultado;
+        string resultado;
         for (const auto& conteo : conteos) {
-            char caracterMenosRepetido;
-            int minConteo = 0;
+            char caracterMenosRepetido = '\0';
+            int minConteo = numeric_limits<int>::max();
             for (const auto& par : conteo) {
-                if (par.second < minConteo || minConteo == 0) {
+                if (par.second < minConteo) {
                     minConteo = par.second;
                     caracterMenosRepetido = par.first;
                 }
             }
-        resultado += caracterMenosRepetido;
+            resultado += caracterMenosRepetido;
         }
-    return resultado;
+        return resultado;
     }
 
     int contarDiferencias() {
@@ -70,7 +71,7 @@ class Greedy{
                     diferencias++;
                 }
             }
-            float total = diferencias/mmm;
+            float total = static_cast<float>(diferencias) / mmm;
             if (total >= thr) {
                 contador++;
             }
@@ -78,15 +79,21 @@ class Greedy{
         return contador;
     }
 
-    public:
-     Greedy(const string &ifp, float thr){
-        this->ifp = ifp;
-        this->thr = thr;
+public:
+    Greedy(const string &ifp, float thr) : ifp(ifp), thr(thr), nnn(0), mmm(0) {
         if (!abrirArchivo()) {
-        exit(1);
+            exit(1);
         }
         finaltext = analizarCadenas();
         finalquality = contarDiferencias();
-        cout << finalquality << finaltext << endl;
+        cout << finalquality << " " << finaltext << endl;
     }
+};
+
+int main() {
+    std::string archivo = "Dataset/100-300-001.txt";
+    float thr = 0.8;
+    Greedy algoritmo(archivo, thr);
+
+    return 0;
 };
