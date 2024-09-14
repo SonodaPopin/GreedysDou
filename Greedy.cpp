@@ -11,6 +11,7 @@ class Greedy{
     private:
     string ifp, text;
     float thr;
+    int nnn, mmm, iii;
 
     bool abrirArchivo(){
         ifstream inputFile(ifp);
@@ -27,6 +28,17 @@ class Greedy{
         }
     }
 
+    void separador() {
+        string p1, p2, p3;
+        istringstream iss(ifp);
+        getline(iss, p1, '-');
+        getline(iss, p2, '-');
+        getline(iss, p2, '.');
+        nnn = stoi(p1);
+        mmm = stoi(p2);
+        iii = stoi(p3);
+    }
+    
     public:
      Greedy(const string &ifp, float thr){
         this->ifp = ifp;
@@ -34,5 +46,6 @@ class Greedy{
         if (!abrirArchivo()) {
         exit(1);
         }
+        separador();
     }
 };
