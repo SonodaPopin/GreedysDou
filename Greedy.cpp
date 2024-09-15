@@ -8,7 +8,9 @@
 #include <chrono>
 
 using namespace std;
-
+    /**
+     * @brief Clase Greedy que realiza los procesos y guarda los resultados.
+     */
 class Greedy {
 private:
     string ifp, text, finaltext;
@@ -16,7 +18,10 @@ private:
     int nnn, mmm, finalquality;
     vector<string> cadenasOriginales;
     chrono::duration<double> elapsed;
-
+    /**
+    * @brief Abre un archivo .txt y pasa su contenido a un string.
+    * @return false si no se pudo abrir el archivo, true si se logró.
+    */
     bool abrirArchivo() {
         ifstream inputFile(ifp);
         if (!inputFile.is_open()) {
@@ -30,7 +35,11 @@ private:
             return true;
         }
     }
-
+    /**
+    * @brief Toma una una cadena de texto y la separa en muchas cadenas que estaban separadas por un espacio,
+    * comparándolas para encontrar los caracteres que menos se repiten en cada posición y crear una nueva cadena en base a ellos.
+    * @return La cadena resultante compuesta de los caracteres menos repetidos.
+    */
     string analizarCadenas() {
         stringstream ss(text);
         string cadena;
@@ -62,7 +71,11 @@ private:
         }
         return resultado;
     }
-
+    /**
+     * @brief Cuenta las diferencias entre la cadena antes creada y las cadenas originales, aumentando en 1 el contador 
+     * por cada cadena cuyo porcentaje de diferencia con la otra es mayor al umbral seleccionado.
+     * @return El número total de cadenas que cumplen esta condición.
+     */
     int contarDiferencias() {
         int contador = 0;
         for (const string& cadena : cadenasOriginales) {
@@ -81,6 +94,12 @@ private:
     }
 
 public:
+    /**
+    * @brief El método constructor de Greedy que llama a las otras funciones y guarda el tiempo total de ejecución además
+    * del resultado final de calidad.
+    * @param ifp el string sobre el que se aplicará el greedy.
+    * @param thr el umbral que se usará.
+    */
     Greedy(const string &ifp, float thr) : ifp(ifp), thr(thr), nnn(0), mmm(0) {
         if (!abrirArchivo()) {
             exit(1);
@@ -91,16 +110,23 @@ public:
         auto end = chrono::high_resolution_clock::now();
         elapsed = end - start;
     }
-
+    /**
+     * @brief Getter para obtener el tiempo de ejecución guardado.
+     * @return El tiempo.
+     */
     chrono::duration<double> getElapsed(){
         return(elapsed);
     }
+    /**
+     * @brief Getter para obtener el valor de calidad final guardado.
+     * @return El valor de calidad.
+     */
     float getQuality(){
         return(finalquality);
     }
 };
-/*
-int main(int argc, char *argv[]) {
+
+/*int main(int argc, char *argv[]) {
     if (argc != 5) {
         std::cerr << "Uso: " << argv[0] << " -i <archivo> -th <umbral>" << std::endl;
         return 1;
@@ -126,5 +152,4 @@ int main(int argc, char *argv[]) {
               << " Tiempo: " << algoritmo.getElapsed().count() << " segundos." << std::endl;
 
     return 0;
-}
-*/
+}*/

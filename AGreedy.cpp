@@ -29,7 +29,6 @@ class AGreedy{
         }
 
         archivo.close();
-        std::cout << "Archivo leído correctamente." << std::endl;
     }
 
     std::vector<char> obtenerCaracteresFrecuentes() {
@@ -160,8 +159,8 @@ class AGreedy{
         return(elapsed);
     }
 };
-/*
- int main(int argc, char* argv[]) {
+
+ /*int main(int argc, char* argv[]) {
      if (argc < 7) {
         std::cerr << "Uso: " << argv[0] << " -i <archivo> -th <umbral> -alpha <valor-alpha>" << std::endl;
         return 1;
@@ -194,5 +193,4 @@ class AGreedy{
               << " Tiempo: " << algoritmo.getElapsed().count() << " segundos." << std::endl;
 
     return 0;
-}
-*/
+}*/

@@ -14,13 +14,19 @@
 #include "Greedy.cpp"
 #include "AGreedy.cpp"
 
-// Función para calcular la media de un vector de floats
+    /**
+     * @brief Calcula la media de un vector de floats.
+     * @return La media.
+     */
 double calcularMedia(const std::vector<double>& valores) {
     double suma = std::accumulate(valores.begin(), valores.end(), 0.0);
     return suma / valores.size();
 }
 
-// Función para calcular la desviación estándar de un vector de doubles
+    /**
+     * @brief Calcula la desviación estándar de un vector de doubles.
+     * @return La desviación estándar.
+     */
 double calcularDesviacionEstandar(const std::vector<double>& valores, double media) {
     double sumaCuadrados = 0.0;
     for (double valor : valores) {
@@ -28,47 +34,78 @@ double calcularDesviacionEstandar(const std::vector<double>& valores, double med
     }
     return std::sqrt(sumaCuadrados / valores.size());
 }
-
-void loopGreedy(){
-
-}
-
-void loopAGreedy(int N, int M, float umbral, float alpha) {
+    /**
+     * @brief Realiza el Greedy sobre un conjunto de archivos txt dentro del dataset.
+     * @return La desviación estándar.
+     * @param N Se revisarán los archivos con este número de cadenas.
+     * @param M Se revisarán los archivos con cadenas de este largo.
+     * @param umbral el umbral que se usará en el greedy.
+     */
+void loopGreedy(int N, int M, float umbral){
     std::vector<double> calidades;
-    std::vector<double> tiempos;
-
-    // Generar archivos con formato N-M-001.txt hasta N-M-100.txt
-    for (int i = 1; i <= 100; ++i) {
-        // Crear el nombre del archivo en formato N-M-XXX.txt
-        std::ostringstream nombreArchivo;
-        nombreArchivo <<"D:/Joako/Desktop/Archivos de la U/SistemasAdaptativos/GreedysDou/Dataset/"<< N << "-" << M << "-" << std::setfill('0') << std::setw(3) << i << ".txt";
+    string j = "000";
+        for (int i = 1; i <= 100; ++i) {
+        if (i < 10){
+            j = "00" +std::to_string(i);
+        }else if(i < 100){
+            j = "0" +std::to_string(i); 
+        }else{
+            j = "100";
+        }
+        string archivo = "Dataset/" + std::to_string(N) + "-" + std::to_string(M) + "-" + j + ".txt";
 
         // Ejecutar AGreedy en el archivo
-        std::string archivo = nombreArchivo.str();
-        std::cout << "Ejecutando AGreedy para archivo: " << archivo << std::endl;
+
+        Greedy algoritmo(archivo, umbral);
+        calidades.push_back(algoritmo.getQuality());
+    }
+    double mediaCalidad = calcularMedia(calidades);
+    std::cout << "Media Calidad Greedy: " << mediaCalidad << std::endl;
+}
+    /**
+     * @brief Realiza el Greedy aleatorizado sobre un conjunto de archivos txt dentro del dataset.
+     * @return La desviación estándar.
+     * @param N Se revisarán los archivos con este número de cadenas.
+     * @param M Se revisarán los archivos con cadenas de este largo.
+     * @param umbral el umbral que se usará en el greedy.
+     * @param alpha el valor de alpha que se usará en el greedy.
+     */
+void loopAGreedy(int N, int M, float umbral, float alpha){
+    std::vector<double> calidades;
+    string j = "000";
+        for (int i = 1; i <= 100; ++i) {
+        if (i < 10){
+            j = "00" +std::to_string(i);
+        }else if(i < 100){
+            j = "0" +std::to_string(i); 
+        }else{
+            j = "100";
+        }
+        string archivo = "Dataset/" + std::to_string(N) + "-" + std::to_string(M) + "-" + j + ".txt";
 
         AGreedy algoritmo(archivo, umbral, alpha);
         calidades.push_back(algoritmo.getCalidad());
-        tiempos.push_back(algoritmo.getElapsed().count());
     }
-
-    // Calcular media y desviación estándar de calidades
     double mediaCalidad = calcularMedia(calidades);
     double desviacionCalidad = calcularDesviacionEstandar(calidades, mediaCalidad);
-
-    // Calcular media y desviación estándar de tiempos
-    double mediaTiempo = calcularMedia(tiempos);
-    double desviacionTiempo = calcularDesviacionEstandar(tiempos, mediaTiempo);
-
-    // Mostrar los resultados
-    std::cout << "Resultados para N = " << N << ", M = " << M << std::endl;
-    std::cout << "Media Calidad A-Greedy: " << mediaCalidad << std::endl;
-    std::cout << "Desviación Estándar Calidad A-Greedy: " << desviacionCalidad << std::endl;
-    std::cout << "Media Tiempo A-Greedy: " << mediaTiempo << " segundos" << std::endl;
-    std::cout << "Desviación Estándar Tiempo A-Greedy: " << desviacionTiempo << " segundos" << std::endl;
+    std::cout << "Media Calidad AGreedy: " << mediaCalidad << std::endl;
+    std::cout << "Desviacion Estandar Calidad A-Greedy: " << desviacionCalidad << std::endl;
 }
-
+    /**
+     * @brief Función main que realiza las pruebas
+     */
 int main() {
-    loopAGreedy(100,300,0.8,0.5);
+    loopGreedy(100,300,0.8);
+    loopGreedy(100,600,0.8);
+    loopGreedy(100,800,0.8);
+    loopGreedy(200,300,0.8);
+    loopGreedy(200,600,0.8);
+    loopGreedy(200,800,0.8);
+    loopAGreedy(100,300,0.8, 0.5);
+    loopAGreedy(100,600,0.8, 0.5);
+    loopAGreedy(100,800,0.8, 0.5);
+    loopAGreedy(200,300,0.8, 0.5);
+    loopAGreedy(200,600,0.8, 0.5);
+    loopAGreedy(200,800,0.8, 0.5);
     return 0;
 }
