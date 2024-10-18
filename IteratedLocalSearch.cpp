@@ -61,7 +61,7 @@ private:
             string cadenaDestruida = demoledor(solution, destructionMargin);
             string cadenaReconstruida = reconstruir(cadenaDestruida);
             int nuevaCalidad = codicia.contarDiferencias(cadenaReconstruida);
-            if (nuevaCalidad < solQuality) {
+            if (nuevaCalidad > solQuality) {
                 solution = cadenaReconstruida;
                 solQuality = nuevaCalidad;
                 bestTime = system_clock::now();
