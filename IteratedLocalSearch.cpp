@@ -17,6 +17,7 @@ private:
     float destructionMargin;
     vector<string> cadenasOriginales;
     system_clock::time_point startTime;
+    system_clock::time_point bestTime;
     /**
      * @brief Destruye partes aleatorias de la cadena entregada reemplazandolas por partes aleatorias de las cadenas originales.
      * @param stringademoler La cadena a modificar.
@@ -60,6 +61,7 @@ private:
             if (nuevaCalidad < solQuality) {
                 solution = cadenaReconstruida;
                 solQuality = nuevaCalidad;
+                bestTime = system_clock::now();
             }
         }
     }
@@ -78,6 +80,20 @@ public:
         solQuality = codicia.getQuality();
         cadenasOriginales = codicia.getOriginales();
         iterar();
+    }
+    /**
+     * @brief Getter para obtener el valor de calidad final guardado.
+     * @return El valor de calidad.
+     */
+    float getFinalQuality(){
+        return(solQuality);
+    }
+    /**
+     * @brief Getter para obtener el valor de calidad final guardado.
+     * @return El valor de calidad.
+     */
+    double getFinalTime() {
+        return duration_cast<seconds>(bestTime - startTime).count();
     }
 };
 
@@ -114,8 +130,8 @@ int main(int argc, char *argv[]) {
     IteratedLocalSearch algoritmo(archivo, umbral, tiempoMax, 0.1);
 
     // Muestra los resultados finales
-    cout << "Calidad final: " << algoritmo.getQuality() 
-         << " Tiempo total: " << algoritmo.getElapsed().count() << " segundos." << endl;
+    cout << "Calidad final: " << algoritmo.getFinalQuality() 
+         << " Tiempo total: " << algoritmo.getFinalTime() << " segundos." << endl;
 
     return 0;
 }
