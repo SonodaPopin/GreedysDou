@@ -79,7 +79,7 @@ public:
      * @param maxTime El tiempo máximo (en segundos) para ejecutar las iteraciones.
      * @param destructionMargin El porcentaje de la cadena que será modificada en cada iteración.
      */
-    IteratedLocalSearch(const string& ifp, float thr, int maxTime, float destructionMargin) 
+    IteratedLocalSearch(const std::string& ifp, float thr, int maxTime, float destructionMargin) 
         : codicia(ifp, thr), maxTime(maxTime), destructionMargin(destructionMargin) {
         solution = codicia.getFinaltext();
         solQuality = codicia.getQuality();

@@ -13,6 +13,7 @@
 #include <iomanip>  
 #include "Greedy.cpp"
 #include "AGreedy.cpp"
+#include "IteratedLocalSearch.cpp"
 
     /**
      * @brief Calcula la media de un vector de floats.
@@ -91,6 +92,30 @@ void loopAGreedy(int N, int M, float umbral, float alpha){
     std::cout << "Media Calidad AGreedy: " << mediaCalidad << std::endl;
     std::cout << "Desviacion Estandar Calidad A-Greedy: " << desviacionCalidad << std::endl;
 }
+
+void loopILS(int N, int M, float umbral, int tiempoMax, float destructionMargin){
+    std::vector<double> calidades;
+    std::string j = "000";
+        for (int i = 1; i <= 100; ++i) {
+        if (i < 10){
+            j = "00" +std::to_string(i);
+        }else if(i < 100){
+            j = "0" +std::to_string(i); 
+        }else{
+            j = "100";
+        }
+        std::string archivo = "Dataset/" + std::to_string(N) + "-" + std::to_string(M) + "-" + j + ".txt";
+
+        IteratedLocalSearch algoritmo(archivo, umbral, tiempoMax, destructionMargin);
+        calidades.push_back(algoritmo.getFinalQuality());
+    }
+    double mediaCalidad = calcularMedia(calidades);
+    double desviacionCalidad = calcularDesviacionEstandar(calidades, mediaCalidad);
+    std::cout << "Media Calidad AGreedy: " << mediaCalidad << std::endl;
+    std::cout << "Desviacion Estandar Calidad A-Greedy: " << desviacionCalidad << std::endl;
+}
+
+
     /**
      * @brief Función main que realiza las pruebas
      */
