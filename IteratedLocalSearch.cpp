@@ -65,6 +65,8 @@ private:
                 solution = cadenaReconstruida;
                 solQuality = nuevaCalidad;
                 bestTime = system_clock::now();
+                cout << "Mejor calidad obtenida: " << solQuality 
+                << " Tiempo usado para obtenerla: " << getFinalTime() << " segundos." << endl;
             }
         }
     }
