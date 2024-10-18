@@ -126,7 +126,7 @@ public:
     }
 };
 
-/*int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
     if (argc != 5) {
         std::cerr << "Uso: " << argv[0] << " -i <archivo> -th <umbral>" << std::endl;
         return 1;
@@ -152,4 +152,4 @@ public:
               << " Tiempo: " << algoritmo.getElapsed().count() << " segundos." << std::endl;
 
     return 0;
-}*/
+}
