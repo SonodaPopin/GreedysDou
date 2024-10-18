@@ -1,7 +1,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <chrono>
-#include "Greedy.cpp"  // Incluye tu archivo Greedy.h que contiene la implementación del Greedy original
+#include "Greedy.cpp"
+#include "LocalSearch.cpp"
 
 using namespace std;
 using namespace chrono;
@@ -12,6 +13,7 @@ using namespace chrono;
 class IteratedLocalSearch {
 private:
     Greedy codicia;
+    string menoscodicia;
     string solution;
     int maxTime, solQuality;
     float destructionMargin;
@@ -39,7 +41,8 @@ private:
      * @return La cadena reconstruida.
      */
     string reconstruir(const string& stringdestruido) {
-        return 0;
+        LocalSearch reparar(cadenasOriginales);
+        return reparar.local_search(stringdestruido);
     }
     /**
      * @brief Verifica si ha pasado el tiempo máximo permitido para las iteraciones.
@@ -102,12 +105,10 @@ int main(int argc, char *argv[]) {
         cerr << "Uso: " << argv[0] << " -i <archivo> -th <umbral> -t <tiempo> -dm <margen de destruccion>" << endl;
         return 1;
     }
-
     string archivo;
     float umbral = 0.0;
-    int tiempoMax = 0;
-    
-    // Procesa los argumentos de línea de comandos
+    int tiempoMax = 0;  
+    float destructionMargin = 0.0;
     for (int i = 1; i < argc; i++) {
         if (string(argv[i]) == "-i" && i + 1 < argc) {
             archivo = argv[++i];  // Obtiene el nombre del archivo
@@ -115,23 +116,20 @@ int main(int argc, char *argv[]) {
             umbral = stof(argv[++i]);  // Convierte el umbral a float
         } else if (string(argv[i]) == "-t" && i + 1 < argc) {
             tiempoMax = stoi(argv[++i]);  // Convierte el tiempo máximo a int
+        } else if (string(argv[i]) == "-dm" && i + 1 < argc) { // Añadir verificación para destructionMargin
+            destructionMargin = stof(argv[++i]);  // Convierte el margen de destrucción a float
         } else {
             cerr << "Argumento no reconocido: " << argv[i] << endl;
             return 1;
         }
     }
-
-    if (archivo.empty() || umbral <= 0.0 || tiempoMax <= 0) {
-        cerr << "Archivo, umbral o tiempo inválidos." << endl;
+    if (archivo.empty() || umbral <= 0.0 || tiempoMax <= 0 || destructionMargin < 0.0 || destructionMargin > 1.0) {
+        cerr << "Archivo, umbral, tiempo o margen de destrucción inválidos." << endl;
         return 1;
     }
-
-    // Crea una instancia de IteratedGreedy con el archivo, umbral y tiempo máximo
-    IteratedLocalSearch algoritmo(archivo, umbral, tiempoMax, 0.1);
-
-    // Muestra los resultados finales
-    cout << "Calidad final: " << algoritmo.getFinalQuality() 
-         << " Tiempo total: " << algoritmo.getFinalTime() << " segundos." << endl;
+    IteratedLocalSearch algoritmo(archivo, umbral, tiempoMax, destructionMargin);
+    cout << "Mejor calidad obtenida: " << algoritmo.getFinalQuality() 
+         << " Tiempo usado para obtenerla: " << algoritmo.getFinalTime() << " segundos." << endl;
 
     return 0;
 }
