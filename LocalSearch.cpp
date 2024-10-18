@@ -44,7 +44,9 @@ private:
     }
 
 public:
-    LocalSearch(const std::vector<std::string>& data) : dataset(data) {}
+    LocalSearch(const std::vector<std::string>& data) : dataset(data) {
+        srand(static_cast<unsigned int>(time(0)));
+    }
 
     std::string local_search(const std::string& current_solution) {
         std::string best_solution = current_solution;
