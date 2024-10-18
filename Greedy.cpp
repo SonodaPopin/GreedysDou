@@ -12,7 +12,7 @@ using namespace std;
      * @brief Clase Greedy que realiza los procesos y guarda los resultados.
      */
 class Greedy {
-private:
+protected:
     string ifp, text, finaltext;
     float thr;
     int nnn, mmm, finalquality;
@@ -36,7 +36,7 @@ private:
         }
     }
     /**
-    * @brief Toma una una cadena de texto y la separa en muchas cadenas que estaban separadas por un espacio,
+    * @brief Toma una cadena de texto y la separa en muchas cadenas que estaban separadas por un espacio,
     * comparándolas para encontrar los caracteres que menos se repiten en cada posición y crear una nueva cadena en base a ellos.
     * @return La cadena resultante compuesta de los caracteres menos repetidos.
     */
@@ -76,12 +76,12 @@ private:
      * por cada cadena cuyo porcentaje de diferencia con la otra es mayor al umbral seleccionado.
      * @return El número total de cadenas que cumplen esta condición.
      */
-    int contarDiferencias() {
+    int contarDiferencias(const string& txtnuevo) {
         int contador = 0;
         for (const string& cadena : cadenasOriginales) {
             int diferencias = 0;
             for (int i = 0; i < cadena.length(); i++) {
-                if (cadena[i] != finaltext[i]) {
+                if (cadena[i] != txtnuevo[i]) {
                     diferencias++;
                 }
             }
@@ -106,7 +106,7 @@ public:
         }
         auto start = chrono::high_resolution_clock::now();
         finaltext = analizarCadenas();
-        finalquality = contarDiferencias();
+        finalquality = contarDiferencias(finaltext);
         auto end = chrono::high_resolution_clock::now();
         elapsed = end - start;
     }
