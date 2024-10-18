@@ -95,6 +95,7 @@ void loopAGreedy(int N, int M, float umbral, float alpha){
 
 void loopILS(int N, int M, float umbral, int tiempoMax, float destructionMargin){
     std::vector<double> calidades;
+    std::vector<double> tiempos;
     std::string j = "000";
         for (int i = 1; i <= 100; ++i) {
         if (i < 10){
@@ -104,15 +105,18 @@ void loopILS(int N, int M, float umbral, int tiempoMax, float destructionMargin)
         }else{
             j = "100";
         }
-        std::string archivo = "Dataset/" + std::to_string(N) + "-" + std::to_string(M) + "-" + j + ".txt";
+        std::string archivo = "D:/Joako/Desktop/Archivos de la U/SistemasAdaptativos/GreedysDou/Dataset/" + std::to_string(N) + "-" + std::to_string(M) + "-" + j + ".txt";
 
         IteratedLocalSearch algoritmo(archivo, umbral, tiempoMax, destructionMargin);
         calidades.push_back(algoritmo.getFinalQuality());
+        tiempos.push_back(algoritmo.getFinalTime());
     }
     double mediaCalidad = calcularMedia(calidades);
     double desviacionCalidad = calcularDesviacionEstandar(calidades, mediaCalidad);
-    std::cout << "Media Calidad AGreedy: " << mediaCalidad << std::endl;
-    std::cout << "Desviacion Estandar Calidad A-Greedy: " << desviacionCalidad << std::endl;
+    double tiempoPromedio = calcularMedia(tiempos);
+    std::cout << "Media Calidad ILS: " << mediaCalidad << std::endl;
+    std::cout << "Desviacion Estandar Calidad ILS: " << desviacionCalidad << std::endl;
+    std::cout << "Tiempo Promedio ILS: " << tiempoPromedio << std::endl;
 }
 
 
@@ -120,17 +124,6 @@ void loopILS(int N, int M, float umbral, int tiempoMax, float destructionMargin)
      * @brief Función main que realiza las pruebas
      */
 int main() {
-    loopGreedy(100,300,0.8);
-    loopGreedy(100,600,0.8);
-    loopGreedy(100,800,0.8);
-    loopGreedy(200,300,0.8);
-    loopGreedy(200,600,0.8);
-    loopGreedy(200,800,0.8);
-    loopAGreedy(100,300,0.8, 0.5);
-    loopAGreedy(100,600,0.8, 0.5);
-    loopAGreedy(100,800,0.8, 0.5);
-    loopAGreedy(200,300,0.8, 0.5);
-    loopAGreedy(200,600,0.8, 0.5);
-    loopAGreedy(200,800,0.8, 0.5);
+   
     return 0;
 }
