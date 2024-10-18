@@ -7,12 +7,15 @@ using namespace std;
 using namespace chrono;
 
 /**
- * @brief Clase IteratedGreedy que extiende el Greedy original para realizar iteraciones en búsqueda de mejores resultados.
+ * @brief Clase IteratedLocalSearch que emplea un proceso de destrucción y LocalSearch para mejorar una solución planteada por Greedy.
  */
-class IteratedGreedy : public Greedy {
+class IteratedLocalSearch {
 private:
-    int maxTime;
+    Greedy codicia;
+    string solution;
+    int maxTime, solQuality;
     float destructionMargin;
+    vector<string> cadenasOriginales;
     system_clock::time_point startTime;
     /**
      * @brief Destruye partes aleatorias de la cadena entregada reemplazandolas por partes aleatorias de las cadenas originales.
@@ -35,7 +38,7 @@ private:
      * @return La cadena reconstruida.
      */
     string reconstruir(const string& stringdestruido) {
-        return analizarCadenas();
+        return 0;
     }
     /**
      * @brief Verifica si ha pasado el tiempo máximo permitido para las iteraciones.
@@ -51,12 +54,12 @@ private:
     void iterar() {
         startTime = system_clock::now();
         while (!checkTime()) {
-            string cadenaDestruida = demoledor(finaltext, destructionMargin);
+            string cadenaDestruida = demoledor(solution, destructionMargin);
             string cadenaReconstruida = reconstruir(cadenaDestruida);
-            int nuevaCalidad = contarDiferencias(cadenaReconstruida);
-            if (nuevaCalidad < finalquality) {
-                finaltext = cadenaReconstruida;
-                finalquality = nuevaCalidad;
+            int nuevaCalidad = codicia.contarDiferencias(cadenaReconstruida);
+            if (nuevaCalidad < solQuality) {
+                solution = cadenaReconstruida;
+                solQuality = nuevaCalidad;
             }
         }
     }
@@ -69,15 +72,18 @@ public:
      * @param maxTime El tiempo máximo (en segundos) para ejecutar las iteraciones.
      * @param destructionMargin El porcentaje de la cadena que será modificada en cada iteración.
      */
-    IteratedGreedy(const string& ifp, float thr, int maxTime, float destructionMargin) 
-        : Greedy(ifp, thr), maxTime(maxTime), destructionMargin(destructionMargin) {
+    IteratedLocalSearch(const string& ifp, float thr, int maxTime, float destructionMargin) 
+        : codicia(ifp, thr), maxTime(maxTime), destructionMargin(destructionMargin) {
+        solution = codicia.getFinaltext();
+        solQuality = codicia.getQuality();
+        cadenasOriginales = codicia.getOriginales();
         iterar();
     }
 };
 
 int main(int argc, char *argv[]) {
-    if (argc != 6) {
-        cerr << "Uso: " << argv[0] << " -i <archivo> -th <umbral> -t <tiempo>" << endl;
+    if (argc != 9) {
+        cerr << "Uso: " << argv[0] << " -i <archivo> -th <umbral> -t <tiempo> -dm <margen de destruccion>" << endl;
         return 1;
     }
 
@@ -105,7 +111,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Crea una instancia de IteratedGreedy con el archivo, umbral y tiempo máximo
-    IteratedGreedy algoritmo(archivo, umbral, tiempoMax, 0.1);
+    IteratedLocalSearch algoritmo(archivo, umbral, tiempoMax, 0.1);
 
     // Muestra los resultados finales
     cout << "Calidad final: " << algoritmo.getQuality() 

@@ -12,7 +12,7 @@ using namespace std;
      * @brief Clase Greedy que realiza los procesos y guarda los resultados.
      */
 class Greedy {
-protected:
+private:
     string ifp, text, finaltext;
     float thr;
     int nnn, mmm, finalquality;
@@ -71,6 +71,8 @@ protected:
         }
         return resultado;
     }
+
+public:
     /**
      * @brief Cuenta las diferencias entre la cadena antes creada y las cadenas originales, aumentando en 1 el contador 
      * por cada cadena cuyo porcentaje de diferencia con la otra es mayor al umbral seleccionado.
@@ -92,8 +94,6 @@ protected:
         }
         return contador;
     }
-
-public:
     /**
     * @brief El método constructor de Greedy que llama a las otras funciones y guarda el tiempo total de ejecución además
     * del resultado final de calidad.
@@ -123,6 +123,20 @@ public:
      */
     float getQuality(){
         return(finalquality);
+    }
+    /**
+     * @brief Getter para obtener el string final obtenido.
+     * @return El string.
+     */
+    string getFinaltext(){
+        return(finaltext);
+    }
+    /**
+     * @brief Getter para obtener las cadenas originales.
+     * @return Un vector de strings.
+     */
+    vector<string> getOriginales(){
+        return(cadenasOriginales);
     }
 };
 
