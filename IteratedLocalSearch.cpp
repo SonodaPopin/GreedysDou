@@ -19,7 +19,7 @@ private:
     float destructionMargin;
     vector<string> cadenasOriginales;
     system_clock::time_point startTime;
-    system_clock::time_point bestTime;
+    system_clock::time_point bestTime = system_clock::time_point::min();
     /**
      * @brief Destruye partes aleatorias de la cadena entregada reemplazandolas por partes aleatorias de las cadenas originales.
      * @param stringademoler La cadena a modificar.
@@ -94,12 +94,15 @@ public:
         return(solQuality);
     }
     /**
-     * @brief Getter para obtener el valor de calidad final guardado.
-     * @return El valor de calidad.
+     * @brief Getter para obtener el tiempo de la mejor solución obtenida.
+     * @return El tiempo.
      */
-    double getFinalTime() {
-        return duration_cast<seconds>(bestTime - startTime).count();
+double getFinalTime() {
+    if (bestTime == system_clock::time_point::min()) {
+        return 0.0;
     }
+    return duration_cast<seconds>(bestTime - startTime).count();
+}
 };
 
 int main(int argc, char *argv[]) {
