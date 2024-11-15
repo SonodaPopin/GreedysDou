@@ -124,6 +124,6 @@ void loopILS(int N, int M, float umbral, int tiempoMax, float destructionMargin)
      * @brief Función main que realiza las pruebas
      */
 int main() {
-   
+   loopILS(200,800,0.8,10,0.2);
     return 0;
 }

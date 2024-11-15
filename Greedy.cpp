@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <limits>
 #include <chrono>
+#pragma once
 
 using namespace std;
     /**

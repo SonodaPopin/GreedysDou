@@ -104,7 +104,7 @@ double getFinalTime() {
     return duration_cast<seconds>(bestTime - startTime).count();
 }
 };
-
+/** 
 int main(int argc, char *argv[]) {
     if (argc != 9) {
         cerr << "Uso: " << argv[0] << " -i <archivo> -th <umbral> -t <tiempo> -dm <margen de destruccion>" << endl;
@@ -138,3 +138,4 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
+*/
