@@ -16,7 +16,8 @@ private:
     AGreedy2 creador;
     string bestSol;
     vector<string> cadenasOriginales;
-    std::map<string, int> cadenas100, cadenas150;
+    vector<string> cadenas100, cadenas150;
+    vector<int> valores100, valores150;
     system_clock::time_point startTime;
     system_clock::time_point bestTime = system_clock::time_point::min();
 
@@ -50,12 +51,20 @@ private:
     void genetizar() {
         startTime = system_clock::now();
         while (!checkTime()) {
-            string cadenaDestruida = demoledor(solution, destructionMargin);
-            string cadenaReconstruida = reconstruir(cadenaDestruida);
-            int nuevaCalidad = codicia.contarDiferencias(cadenaReconstruida);
-            if (nuevaCalidad > solQuality) {
-                solution = cadenaReconstruida;
-                solQuality = nuevaCalidad;
+            cadenas150 = procreador(cadenas100, valores100);
+            cadenas100 = matador(cadenas150, valores150);
+            int maxValor = 0;
+            string nuevaCadena = "";
+            for (int i; i<100; i++) {
+                int valor = valores100[i];
+                if (valor > maxValor) {
+                    maxValor = valor;
+                    nuevaCadena = cadenas100[i];
+                }
+            }
+            if (maxValor > solQuality) {
+                bestSol = nuevaCadena;
+                solQuality = maxValor;
                 bestTime = system_clock::now();
                 cout << "Mejor calidad obtenida: " << solQuality 
                 << " Tiempo usado para obtenerla: " << getFinalTime() << " segundos." << endl;
@@ -64,10 +73,11 @@ private:
     }
 public:
     Genetico(const std::string& ifp, int maxTime) 
-        : creador(ifp, thr, alpha), maxTime(maxTime),{
+        : creador(ifp, thr, alpha), maxTime(maxTime){
         for (int i=0; i<100; i++){
             string solucion = creador.generarSolucion();
-            cadenas100[solucion] = contarDiferencias(solucion);
+            cadenas100[i] = solucion;
+            valores100[i] = contarDiferencias(solucion);
         }
         cadenasOriginales = creador.getDatos();
         genetizar();
