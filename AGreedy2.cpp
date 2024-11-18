@@ -9,7 +9,7 @@
 #include <chrono>
 #include <algorithm>
 
-class AGreedy{
+class AGreedy2{
     private:
     std::string ifp, seleccionada;
     float thr, alpha, calidad;
@@ -137,7 +137,7 @@ class AGreedy{
     }
 
     public:
-    AGreedy(const std::string & ifp, float thr, float alpha){
+    AGreedy2(const std::string & ifp, float thr, float alpha){
         this->ifp = ifp;
         this->thr = thr;
         this->alpha = alpha;
