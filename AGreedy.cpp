@@ -9,6 +9,10 @@
 #include <chrono>
 #include <algorithm>
 
+/**
+ * @brief Clase que implementa un algoritmo heurístico basado en un enfoque codicioso y probabilístico
+ *        para encontrar una cadena que maximice la disimilitud con otras cadenas en un archivo.
+ */
 class AGreedy{
     private:
     std::string ifp, seleccionada;
@@ -16,6 +20,9 @@ class AGreedy{
     std::vector<std::string> datos;
     std::chrono::duration<double> elapsed;
 
+    /**
+     * @brief Lee el archivo y carga su contenido en el dataset.
+     */
     void leerArchivo() {
         std::ifstream archivo(ifp);
         if (!archivo) {
@@ -31,6 +38,10 @@ class AGreedy{
         archivo.close();
     }
 
+    /**
+     * @brief Calcula la frecuencia de cada carácter en todas las líneas y devuelve los caracteres ordenados por frecuencia.
+     * @return Un vector con los caracteres ordenados de mayor a menor frecuencia.
+     */
     std::vector<char> obtenerCaracteresFrecuentes() {
         std::unordered_map<char, int> frecuencia;
         
@@ -56,6 +67,12 @@ class AGreedy{
         return caracteresFrecuentes;
     }
 
+    /**
+     * @brief Calcula la calidad de la solución basada en el umbral de similitud dado.
+     * @param seleccionada La cadena seleccionada por el algoritmo.
+     * @param thr Umbral de similitud.
+     * @return La calidad como la proporción de cadenas que cumplen con el umbral.
+     */
     double calcularSimilitud(const std::string& seleccionada, float thr) {
     if (datos.empty()) return 0.0;
 
@@ -81,8 +98,12 @@ class AGreedy{
     }
 
     return (conteoDiferencias); 
-}
+    }
 
+    /**
+     * @brief Ejecuta el algoritmo para generar una cadena que maximice la disimilitud.
+     * @return La cadena seleccionada por el algoritmo.
+     */
     std::string ejecutar() {
 
         srand(static_cast<unsigned>(time(0))); // Inicializa la semilla para números aleatorios
@@ -137,6 +158,13 @@ class AGreedy{
     }
 
     public:
+
+    /**
+     * @brief Constructor de la clase AGreedy.
+     * @param ifp Ruta del archivo de entrada.
+     * @param thr Umbral de similitud.
+     * @param alpha Parámetro probabilístico para la selección de caracteres.
+     */
     AGreedy(const std::string & ifp, float thr, float alpha){
         this->ifp = ifp;
         this->thr = thr;
@@ -151,10 +179,18 @@ class AGreedy{
         calidad = calcularSimilitud(seleccionada, thr);
     }
 
+    /**
+     * @brief Devuelve la calidad de la solución seleccionada.
+     * @return Calidad de la solución.
+     */
     float getCalidad(){
         return (calidad);
     }
 
+    /**
+     * @brief Devuelve el tiempo de ejecución del algoritmo.
+     * @return Duración del tiempo de ejecución.
+     */
     std::chrono::duration<double> getElapsed(){
         return(elapsed);
     }

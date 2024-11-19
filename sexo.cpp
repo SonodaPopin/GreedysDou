@@ -7,6 +7,11 @@
 #include <sstream>
 
 using namespace std;
+
+/**
+ * @class Sexo
+ * @brief Clase que genera un "hijo" genético a partir de dos padres, utilizando frecuencias de caracteres en un dataset.
+ */
 class Sexo{
 private:
     char caracter;
@@ -14,6 +19,9 @@ private:
     string padre1, padre2, ifp;
     vector<string> dataset;
 
+    /**
+     * @brief Lee el archivo y carga su contenido en el dataset.
+     */
     void leerArchivo() {
         std::ifstream archivo(ifp);
         if (!archivo) {
@@ -29,6 +37,12 @@ private:
         archivo.close();
     }
 
+    /**
+     * @brief Cuenta la frecuencia de un carácter específico en una posición dada dentro del dataset.
+     * @param caracter El carácter cuya frecuencia se evalúa.
+     * @param posicion La posición en la que se evalúa el carácter.
+     * @return La frecuencia del carácter en la posición especificada.
+     */
     int contarFrecuencia(char caracter, int posicion) {
         int frecuencia = 0;
         for (const string& cadena : dataset) {
@@ -39,10 +53,21 @@ private:
         return frecuencia;
     }
 public:
+
+    /**
+     * @brief Constructor que inicializa la clase leyendo un archivo de entrada.
+     * @param archivo La ruta del archivo a leer.
+     */
     Sexo(const string& archivo) : ifp(archivo){
         leerArchivo();
     }
 
+    /**
+     * @brief Genera un "hijo" genético basado en las frecuencias de caracteres de los padres en el dataset.
+     * @param padre1 Primera cadena parental.
+     * @param padre2 Segunda cadena parental.
+     * @return La cadena resultante que representa al "hijo".
+     */
     string sexo(const string& padre1, const string& padre2) {
         string hijo;
         int longitud = padre1.size();
