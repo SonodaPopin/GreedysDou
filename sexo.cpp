@@ -1,10 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <map>
 #include <algorithm>
 #include <fstream>
-#include <sstream>
+#include "Funciones.cpp"
 
 using namespace std;
 
@@ -14,28 +13,8 @@ using namespace std;
  */
 class Sexo{
 private:
-    char caracter;
-    int posicion;
     string padre1, padre2, ifp;
     vector<string> dataset;
-
-    /**
-     * @brief Lee el archivo y carga su contenido en el dataset.
-     */
-    void leerArchivo() {
-        std::ifstream archivo(ifp);
-        if (!archivo) {
-            std::cerr << "No se puede abrir el archivo: " << ifp << std::endl;
-            exit(1);
-        }
-
-        std::string linea;
-        while (std::getline(archivo, linea)) {
-            dataset.push_back(linea);
-        }
-
-        archivo.close();
-    }
 
     /**
      * @brief Cuenta la frecuencia de un carácter específico en una posición dada dentro del dataset.
@@ -59,7 +38,7 @@ public:
      * @param archivo La ruta del archivo a leer.
      */
     Sexo(const string& archivo) : ifp(archivo){
-        leerArchivo();
+        dataset = leerArchivo(ifp);
     }
 
     /**
