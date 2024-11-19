@@ -48,7 +48,7 @@ private:
             if (valor > maxValor) {
                 maxValor = valor;
             }
-            if (valor < maxValor) {
+            if (valor < minValor) {
                 minValor = valor;
             }
         }
@@ -62,7 +62,7 @@ private:
             bool key = false;
             while(key == false){
                 int seleccionado = rand() % valores100.size();
-                while(selector = seleccionado){
+                while(selector == seleccionado){
                     int seleccionado = rand() % valores100.size();
                 }
                 double distancia = abs(valores100[selector] - valores100[seleccionado]);
