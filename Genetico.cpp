@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cstdlib>
 #include <chrono>
-#include <map>
 #include "AGreedy2.cpp"
 #include "LocalSearch.cpp"
 #include "sexo.cpp"
@@ -29,7 +28,7 @@ private:
         while (!valores100.empty()) {
             int selector = rand() % valores100.size();
             bool key = false;
-            while(key == false){
+            while(!key){
                 int seleccionado = rand() % valores100.size();
                 while(selector == seleccionado){
                     int seleccionado = rand() % valores100.size();
@@ -45,14 +44,11 @@ private:
                     string hijo = cama.sexo(cadenas100[selector], cadenas100[seleccionado]);
                     valores150.push_back(contarDiferencias(hijo, cadenasOriginales, thr));
                     cadenas150.push_back(hijo);
-                    rotate(valores100.begin() + selector, valores100.begin() + selector + 1, valores100.end());
-                    valores100.pop_back();
-                    rotate(cadenas100.begin() + selector, cadenas100.begin() + selector + 1, cadenas100.end());
-                    cadenas100.pop_back();
-                    rotate(valores100.begin() + seleccionado, valores100.begin() + seleccionado + 1, valores100.end());
-                    valores100.pop_back();
-                    rotate(cadenas100.begin() + seleccionado, cadenas100.begin() + seleccionado + 1, cadenas100.end());
-                    cadenas100.pop_back();
+                    valores100.erase(valores100.begin() + selector);
+                    cadenas100.erase(cadenas100.begin() + selector);
+                    if (seleccionado > selector) seleccionado--;
+                    valores100.erase(valores100.begin() + seleccionado);
+                    cadenas100.erase(cadenas100.begin() + seleccionado);
                     key = true;
                 }
             }
@@ -73,18 +69,14 @@ private:
             double chance = distancia/percentil;
             int dado = rand() % 101;
             if (dado >= chance){
-                valores100.push_back(valores100[seleccionado]);
-                cadenas100.push_back(cadenas100[seleccionado]);
-                rotate(valores150.begin() + seleccionado, valores150.begin() + seleccionado + 1, valores150.end());
-                valores150.pop_back();
-                rotate(cadenas150.begin() + seleccionado, cadenas150.begin() + seleccionado + 1, cadenas150.end());
-                cadenas150.pop_back();
+                valores100.push_back(valores150[seleccionado]);
+                cadenas100.push_back(cadenas150[seleccionado]);
+                valores150.erase(valores150.begin() + seleccionado);
+                cadenas150.erase(cadenas150.begin() + seleccionado);
             }
         }
-        while (!valores150.empty()){
-            valores150.pop_back();
-            cadenas150.pop_back();
-        }
+        valores150.clear();
+        cadenas150.clear();
     }
     /**
      * @brief Verifica si ha pasado el tiempo máximo permitido para las iteraciones.
@@ -122,13 +114,15 @@ private:
     }
 public:
     Genetico(const std::string& ifp, int maxTime) 
-        : creador(ifp, thr, alpha), maxTime(maxTime), cama(ifp){
+        : creador(ifp, alpha), maxTime(maxTime), cama(ifp){
+        cadenas100.resize(100);
+        valores100.resize(100);
+        cadenasOriginales = leerArchivo(ifp);
         for (int i=0; i<100; i++){
             string solucion = creador.generarSolucion();
             cadenas100[i] = solucion;
             valores100[i] = contarDiferencias(solucion, cadenasOriginales, thr);
         }
-        cadenasOriginales = creador.getDatos();
         genetizar();
     }
     /**
