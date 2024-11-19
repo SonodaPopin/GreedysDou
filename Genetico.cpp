@@ -43,7 +43,7 @@ private:
          int maxValor = 0;
          int minValor = 999;
          int valor;
-         for (int i; i<valores.size(); i++) {
+         for (int i = 0; i<valores.size(); i++) {
             valor = valores[i];
             if (valor > maxValor) {
                 maxValor = valor;
@@ -92,7 +92,7 @@ private:
     void matador(){
         double percentil = probabilidad(valores150);
         int maxValor = 0;
-        for (int i; i<valores150.size(); i++) {
+        for (int i = 0; i<valores150.size(); i++) {
             int valor = valores150[i];
             if (valor > maxValor) {
                 maxValor = valor;
@@ -135,7 +135,7 @@ private:
             matador();
             int maxValor = 0;
             string nuevaCadena = "";
-            for (int i; i<100; i++) {
+            for (int i = 0; i<100; i++) {
                 int valor = valores100[i];
                 if (valor > maxValor) {
                     maxValor = valor;
