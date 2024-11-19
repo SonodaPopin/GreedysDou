@@ -68,7 +68,7 @@ public:
         return hijo;
     }
 };
-
+/** 
 int main(){
 string archivo="D:/Joako/Desktop/Archivos de la U/SistemasAdaptativos/GreedysDou/Dataset/100-300-001.txt";
 
@@ -93,3 +93,4 @@ string archivo="D:/Joako/Desktop/Archivos de la U/SistemasAdaptativos/GreedysDou
 
     return 0;
 }
+*/ 

@@ -129,3 +129,31 @@ public:
     return duration_cast<seconds>(bestTime - startTime).count();
     }
 };
+
+int main(int argc, char *argv[]) {
+    if (argc != 5) {
+        cerr << "Uso: " << argv[0] << " -i <archivo> -t <tiempo>" << endl;
+        return 1;
+    }
+    string archivo;
+    int tiempoMax = 0;  
+    for (int i = 1; i < argc; i++) {
+        if (string(argv[i]) == "-i" && i + 1 < argc) {
+            archivo = argv[++i];  // Obtiene el nombre del archivo
+        } else if (string(argv[i]) == "-t" && i + 1 < argc) {
+            tiempoMax = stoi(argv[++i]);  // Convierte el tiempo máximo a int
+        } else {
+            cerr << "Argumento no reconocido: " << argv[i] << endl;
+            return 1;
+        }
+    }
+    if (archivo.empty() || tiempoMax <= 0 ) {
+        cerr << "Archivo o tiempo inválidos." << endl;
+        return 1;
+    }
+    Genetico algoritmo(archivo, tiempoMax);
+    cout << "Mejor calidad obtenida: " << algoritmo.getFinalQuality() 
+         << " Tiempo usado para obtenerla: " << algoritmo.getFinalTime() << " segundos." << endl;
+
+    return 0;
+}
