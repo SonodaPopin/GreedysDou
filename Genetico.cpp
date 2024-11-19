@@ -1,8 +1,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <chrono>
+#include <vector>
 #include "AGreedy2.cpp"
-#include "LocalSearch.cpp"
 #include "sexo.cpp"
 #include "Funciones.cpp"
 
@@ -13,7 +13,7 @@ class Genetico {
 private:
     int thr = 0.8;
     int alpha = 0.8;
-    int maxTime, solQuality;
+    int maxTime, solQuality = 0;
     AGreedy2 creador;
     Sexo cama;
     string bestSol;
@@ -56,13 +56,7 @@ private:
     }
     void matador(){
         double percentil = probabilidad(valores150);
-        int maxValor = 0;
-        for (int i = 0; i<valores150.size(); i++) {
-            int valor = valores150[i];
-            if (valor > maxValor) {
-                maxValor = valor;
-            }
-        }
+        int maxValor = *max_element(valores150.begin(), valores150.end());
         while (valores100.size() < 100) {
             int seleccionado = rand() % valores150.size();
             double distancia = abs(maxValor - valores150[seleccionado]);
@@ -94,21 +88,13 @@ private:
         while (!checkTime()) {
             procreador();
             matador();
-            int maxValor = 0;
-            string nuevaCadena = "";
-            for (int i = 0; i<100; i++) {
-                int valor = valores100[i];
-                if (valor > maxValor) {
-                    maxValor = valor;
-                    nuevaCadena = cadenas100[i];
-                }
-            }
-            if (maxValor > solQuality) {
-                bestSol = nuevaCadena;
-                solQuality = maxValor;
+            auto maxIt = max_element(valores100.begin(), valores100.end());
+            if (maxIt != valores100.end() && *maxIt > solQuality) {
+                solQuality = *maxIt;
+                bestSol = cadenas100[distance(valores100.begin(), maxIt)];
                 bestTime = system_clock::now();
                 cout << "Mejor calidad obtenida: " << solQuality 
-                << " Tiempo usado para obtenerla: " << getFinalTime() << " segundos." << endl;
+                     << " Tiempo usado para obtenerla: " << getFinalTime() << " segundos." << endl;
             }
         }
     }
