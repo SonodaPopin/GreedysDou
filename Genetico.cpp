@@ -5,6 +5,7 @@
 #include "AGreedy2.cpp"
 #include "LocalSearch.cpp"
 #include "sexo.cpp"
+#include "Funciones.cpp"
 
 using namespace std;
 using namespace chrono;
@@ -23,38 +24,6 @@ private:
     system_clock::time_point startTime;
     system_clock::time_point bestTime = system_clock::time_point::min();
 
-    int contarDiferencias(const string& txtnuevo) {
-        int contador = 0;
-        for (const string& cadena : cadenasOriginales) {
-            int diferencias = 0;
-            for (int i = 0; i < cadena.length(); i++) {
-                if (cadena[i] != txtnuevo[i]) {
-                    diferencias++;
-                }
-            }
-            float total = static_cast<float>(diferencias) / cadena.length();
-            if (total >= thr) {
-                contador++;
-            }
-        }
-        return contador;
-    }
-    double probabilidad(vector<int> valores){
-         int maxValor = 0;
-         int minValor = 999;
-         int valor;
-         for (int i = 0; i<valores.size(); i++) {
-            valor = valores[i];
-            if (valor > maxValor) {
-                maxValor = valor;
-            }
-            if (valor < minValor) {
-                minValor = valor;
-            }
-        }
-        double percentil = (maxValor-minValor)/100;
-        return percentil;
-    }
     void procreador() {
         double percentil = probabilidad(valores100);
         while (!valores100.empty()) {
@@ -74,7 +43,7 @@ private:
                     valores150.push_back(valores100[seleccionado]);
                     cadenas150.push_back(cadenas100[seleccionado]);
                     string hijo = cama.sexo(cadenas100[selector], cadenas100[seleccionado]);
-                    valores150.push_back(contarDiferencias(hijo));
+                    valores150.push_back(contarDiferencias(hijo, cadenasOriginales, thr));
                     cadenas150.push_back(hijo);
                     rotate(valores100.begin() + selector, valores100.begin() + selector + 1, valores100.end());
                     valores100.pop_back();
@@ -157,7 +126,7 @@ public:
         for (int i=0; i<100; i++){
             string solucion = creador.generarSolucion();
             cadenas100[i] = solucion;
-            valores100[i] = contarDiferencias(solucion);
+            valores100[i] = contarDiferencias(solucion, cadenasOriginales, thr);
         }
         cadenasOriginales = creador.getDatos();
         genetizar();
