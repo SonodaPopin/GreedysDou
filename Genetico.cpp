@@ -55,15 +55,15 @@ private:
         double percentil = (maxValor-minValor)/100;
         return percentil;
     }
-    vector<string> procreador() {
+    void procreador() {
         double percentil = probabilidad(valores100);
         while (!valores100.empty()) {
-            int selector = rand() % cadenas100.size();
+            int selector = rand() % valores100.size();
             bool key = false;
             while(key == false){
-                int seleccionado = rand() % cadenas100.size();
+                int seleccionado = rand() % valores100.size();
                 while(selector = seleccionado){
-                    int seleccionado = rand() % cadenas100.size();
+                    int seleccionado = rand() % valores100.size();
                 }
                 double distancia = abs(valores100[selector] - valores100[seleccionado]);
                 double chance = distancia/percentil;
@@ -89,6 +89,34 @@ private:
             }
         }
     }
+    void matador(){
+        double percentil = probabilidad(valores150);
+        int maxValor = 0;
+        for (int i; i<valores150.size(); i++) {
+            int valor = valores150[i];
+            if (valor > maxValor) {
+                maxValor = valor;
+            }
+        }
+        while (valores100.size() < 100) {
+            int seleccionado = rand() % valores150.size();
+            double distancia = abs(maxValor - valores150[seleccionado]);
+            double chance = distancia/percentil;
+            int dado = rand() % 101;
+            if (dado >= chance){
+                valores100.push_back(valores100[seleccionado]);
+                cadenas100.push_back(cadenas100[seleccionado]);
+                rotate(valores150.begin() + seleccionado, valores150.begin() + seleccionado + 1, valores150.end());
+                valores150.pop_back();
+                rotate(cadenas150.begin() + seleccionado, cadenas150.begin() + seleccionado + 1, cadenas150.end());
+                cadenas150.pop_back();
+            }
+        }
+        while (!valores150.empty()){
+            valores150.pop_back();
+            cadenas150.pop_back();
+        }
+    }
     /**
      * @brief Verifica si ha pasado el tiempo máximo permitido para las iteraciones.
      * @return true si el tiempo límite ha sido excedido, false en caso contrario.
@@ -104,7 +132,7 @@ private:
         startTime = system_clock::now();
         while (!checkTime()) {
             procreador();
-            cadenas100 = matador(cadenas150, valores150);
+            matador();
             int maxValor = 0;
             string nuevaCadena = "";
             for (int i; i<100; i++) {
@@ -146,9 +174,9 @@ public:
      * @return El tiempo.
      */
     double getFinalTime() {
-    if (bestTime == system_clock::time_point::min()) {
-        return 0.0;
-    }
+        if (bestTime == system_clock::time_point::min()) {
+            return 0.0;
+        }
     return duration_cast<seconds>(bestTime - startTime).count();
-}
+    }
 };
