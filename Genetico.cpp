@@ -28,10 +28,12 @@ private:
         while (!valores100.empty()) {
             int selector = rand() % valores100.size();
             bool key = false;
+            cerr << "vivos en valores100:" <<valores100.size() << endl;
+            cerr << "vivos en valores150:" <<valores150.size() << endl;
             while(!key){
                 int seleccionado = rand() % valores100.size();
                 while(selector == seleccionado){
-                    int seleccionado = rand() % valores100.size();
+                    seleccionado = rand() % valores100.size();
                 }
                 double distancia = abs(valores100[selector] - valores100[seleccionado]);
                 double chance = distancia/percentil;
@@ -56,9 +58,7 @@ private:
     }
     void matador(){
         double percentil = probabilidad(valores150);
-        cerr << "percentil bien" << endl;
         int maxValor = *max_element(valores150.begin(), valores150.end());
-        cerr << "maxvalor bien" << endl;
         while (valores100.size() < 100) {
             int seleccionado = rand() % valores150.size();
             double distancia = abs(maxValor - valores150[seleccionado]);
@@ -69,12 +69,13 @@ private:
                 cadenas100.push_back(cadenas150[seleccionado]);
                 valores150.erase(valores150.begin() + seleccionado);
                 cadenas150.erase(cadenas150.begin() + seleccionado);
+                cerr << "vivos en valores150:" <<valores150.size() << endl;
+                cerr << "vivos en valores100:" <<valores100.size() << endl;
             }
         }
-        cerr << "while bien" << endl;
         valores150.clear();
         cadenas150.clear();
-        cerr << "clear bien" << endl;
+        cerr << "vivos en valores150:" <<valores150.size() << endl;
     }
     /**
      * @brief Verifica si ha pasado el tiempo máximo permitido para las iteraciones.
@@ -96,10 +97,10 @@ private:
             cerr << "matando" << endl;
             matador();
             cerr << "verificando" << endl;
-            auto maxIt = max_element(valores100.begin(), valores100.end());
-            if (maxIt != valores100.end() && *maxIt > solQuality) {
-                solQuality = *maxIt;
-                bestSol = cadenas100[distance(valores100.begin(), maxIt)];
+            int maxValue = *std::max_element(valores100.begin(), valores100.end());
+            cerr << "mejor obtenida de generacion " << maxValue << endl;
+            if (maxValue > solQuality) {
+                solQuality = maxValue;
                 bestTime = system_clock::now();
                 cout << "Mejor calidad obtenida: " << solQuality 
                      << " Tiempo usado para obtenerla: " << getFinalTime() << " segundos." << endl;
@@ -118,6 +119,7 @@ public:
             cadenas100[i] = solucion;
             valores100[i] = contarDiferencias(solucion, cadenasOriginales, thr);
             cerr << valores100[i] << endl;
+            cerr << cadenas100[i] << endl;
         }
         cerr << "genetizar" << endl;
         genetizar();
