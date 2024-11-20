@@ -56,7 +56,9 @@ private:
     }
     void matador(){
         double percentil = probabilidad(valores150);
+        cerr << "percentil bien" << endl;
         int maxValor = *max_element(valores150.begin(), valores150.end());
+        cerr << "maxvalor bien" << endl;
         while (valores100.size() < 100) {
             int seleccionado = rand() % valores150.size();
             double distancia = abs(maxValor - valores150[seleccionado]);
@@ -69,8 +71,10 @@ private:
                 cadenas150.erase(cadenas150.begin() + seleccionado);
             }
         }
+        cerr << "while bien" << endl;
         valores150.clear();
         cadenas150.clear();
+        cerr << "clear bien" << endl;
     }
     /**
      * @brief Verifica si ha pasado el tiempo máximo permitido para las iteraciones.
@@ -84,10 +88,14 @@ private:
      * @brief Método para realizar una nueva iteración del algoritmo Iterated Greedy.
      */
     void genetizar() {
+        cerr << "genetizando" << endl;
         startTime = system_clock::now();
         while (!checkTime()) {
+            cerr << "procreando" << endl;
             procreador();
+            cerr << "matando" << endl;
             matador();
+            cerr << "verificando" << endl;
             auto maxIt = max_element(valores100.begin(), valores100.end());
             if (maxIt != valores100.end() && *maxIt > solQuality) {
                 solQuality = *maxIt;
@@ -109,7 +117,9 @@ public:
             string solucion = creador.generarSolucion();
             cadenas100[i] = solucion;
             valores100[i] = contarDiferencias(solucion, cadenasOriginales, thr);
+            cerr << valores100[i] << endl;
         }
+        cerr << "genetizar" << endl;
         genetizar();
     }
     /**

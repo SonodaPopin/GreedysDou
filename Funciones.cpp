@@ -41,8 +41,11 @@ int contarDiferencias(const string& seleccionada, const vector<string>& cadenas,
 
 double probabilidad(vector<int> valores){
     if (valores.empty()) return 0.0;
+    cerr << "percentil.." << endl;
     int maxValor = *max_element(valores.begin(), valores.end());
     int minValor = *min_element(valores.begin(), valores.end());
+    cerr << "percentil..." << endl;
     double percentil = (maxValor-minValor)/100;
+    cerr << "percentil....." << maxValor << minValor << percentil << endl;
     return percentil;
 }
