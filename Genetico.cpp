@@ -4,7 +4,7 @@
 #include <vector>
 #include "AGreedy2.cpp"
 #include "sexo.cpp"
-#include "Funciones.cpp"
+#include "Funciones.h"
 
 using namespace std;
 using namespace chrono;
@@ -101,6 +101,7 @@ private:
 public:
     Genetico(const std::string& ifp, int maxTime) 
         : creador(ifp, alpha), maxTime(maxTime), cama(ifp){
+        cerr << "Constructor genetico" << endl;
         cadenas100.resize(100);
         valores100.resize(100);
         cadenasOriginales = leerArchivo(ifp);
@@ -131,6 +132,7 @@ public:
 };
 
 int main(int argc, char *argv[]) {
+    cerr << "Hola" << endl;
     if (argc != 5) {
         cerr << "Uso: " << argv[0] << " -i <archivo> -t <tiempo>" << endl;
         return 1;

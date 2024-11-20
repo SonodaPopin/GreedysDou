@@ -3,7 +3,7 @@
 #include <string>
 #include <algorithm>
 #include <fstream>
-#include "Funciones.cpp"
+#include "Funciones.h"
 
 using namespace std;
 

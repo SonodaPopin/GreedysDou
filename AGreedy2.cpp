@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <chrono>
 #include <algorithm>
-#include "Funciones.cpp"
+#include "Funciones.h"
 
 /**
  * @brief Clase que implementa un algoritmo heurístico basado en un enfoque codicioso y probabilístico
