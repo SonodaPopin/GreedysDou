@@ -75,11 +75,8 @@ void Genetico::genetizar() {
     while (!checkTime()) {
         int maxValue = *std::max_element(valores100.begin(), valores100.end());
         cerr << "mejor obtenida de generacion " << maxValue << endl;
-        cerr << "procreando" << endl;
         procreador();
-        cerr << "matando" << endl;
         matador();
-        cerr << "verificando" << endl;
         if (maxValue > solQuality) {
             solQuality = maxValue;
             bestTime = system_clock::now();
@@ -98,9 +95,7 @@ Genetico::Genetico(const std::string& ifp, int maxTime, vector<string> cadenas10
     cadenasOriginales = leerArchivo(ifp);
     cerr << "Constructor genetico" << endl;
     for (int i = 0; i < 100; i++) {
-        valores100[i] = contarDiferencias(cadenas100[i], cadenasOriginales, 0.8);
-        cerr << valores100[i] << endl;
-        cerr << cadenas100[i] << endl;
+        valores100[i] = contarDiferencias(cadenas100[i], cadenasOriginales, thr);
     }
     cerr << "genetizar" << endl;
     genetizar();

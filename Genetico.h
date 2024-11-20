@@ -17,7 +17,7 @@
 class Genetico {
 private:
     // Variables miembro privadas
-    int thr = 0.8;                           ///< Umbral para determinar diferencias
+    float thr = 0.8;                           ///< Umbral para determinar diferencias
     int alpha = 0.01;                        ///< Probabilidad de mutación
     int maxTime;                             ///< Tiempo máximo permitido para la ejecución
     int solQuality = 0;                      ///< Calidad de la mejor solución encontrada

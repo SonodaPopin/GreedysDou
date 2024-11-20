@@ -87,7 +87,6 @@ std::vector<std::string> AGreedy2::generarSolucion() {
         gen.seed(std::random_device{}());
         sols[i] = ejecutar();
         int calidad = contarDiferencias(sols[i], datos, 0.8);
-        std::cout << "Calidad: " << calidad << std::endl;
     }
     return sols;
 }
