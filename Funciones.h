@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#pragma once
 
 std::vector<std::string> leerArchivo(const std::string& ifp);
 int contarDiferencias(const std::string& cadena, const std::vector<std::string>& originales, float thr);
